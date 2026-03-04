@@ -37,9 +37,6 @@
         .counter { position: absolute; bottom: 40px; right: 50px; z-index: 10; font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 14px; letter-spacing: 2px; color: rgba(255,255,255,0.7); }
         .counter .current { font-weight: 600; color: #fff; }
 
-        .progress-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.1); z-index: 10; }
-        .progress { height: 100%; background: linear-gradient(90deg, #fff, rgba(255,255,255,0.8)); width: 0%; transition: width 0.1s linear; }
-
         .preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0a; z-index: 100; display: flex; align-items: center; justify-content: center; flex-direction: column; transition: opacity 0.5s ease, visibility 0.5s ease; }
         .preloader.hidden { opacity: 0; visibility: hidden; }
         .preloader-text { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 20px; }
@@ -88,10 +85,6 @@
         <div class="dots"></div>
 
         <div class="counter"><span class="current">01</span> / <span class="total">10</span></div>
-
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
     </div>
 
     <script>
@@ -114,13 +107,11 @@
                 this.totalSlides = images.length;
                 this.autoplayInterval = null;
                 this.autoplayDuration = 6000;
-                this.progressInterval = null;
                 this.isPaused = false;
                 this.slideshow = document.querySelector('.slideshow');
                 this.dotsContainer = document.querySelector('.dots');
                 this.counterCurrent = document.querySelector('.counter .current');
                 this.counterTotal = document.querySelector('.counter .total');
-                this.progress = document.querySelector('.progress');
                 this.preloader = document.querySelector('.preloader');
                 this.init();
             }
@@ -220,7 +211,6 @@
                 slides[this.currentIndex].classList.add('active');
                 dots[this.currentIndex].classList.add('active');
                 this.updateCounter();
-                this.resetProgress();
             }
 
             nextSlide() {
@@ -235,13 +225,6 @@
 
             startAutoplay() {
                 this.pauseAutoplay();
-                this.resetProgress();
-                let progressValue = 0;
-                const step = 100 / (this.autoplayDuration / 50);
-                this.progressInterval = setInterval(() => {
-                    progressValue += step;
-                    this.progress.style.width = `${progressValue}%`;
-                }, 50);
                 this.autoplayInterval = setInterval(() => {
                     this.nextSlide();
                 }, this.autoplayDuration);
@@ -249,7 +232,6 @@
 
             pauseAutoplay() {
                 clearInterval(this.autoplayInterval);
-                clearInterval(this.progressInterval);
             }
 
             togglePause() {
@@ -261,18 +243,6 @@
                 }
             }
 
-            resetProgress() {
-                clearInterval(this.progressInterval);
-                this.progress.style.width = '0%';
-                if (!this.isPaused) {
-                    let progressValue = 0;
-                    const step = 100 / (this.autoplayDuration / 50);
-                    this.progressInterval = setInterval(() => {
-                        progressValue += step;
-                        this.progress.style.width = `${progressValue}%`;
-                    }, 50);
-                }
-            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
